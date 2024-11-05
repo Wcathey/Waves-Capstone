@@ -20,8 +20,8 @@ module.exports = {
           plays: 0,
           genre: "Rock",
           bio: "Demo band name and bio for testing purposes only",
-          label: "none"
-
+          label: "none",
+          memberId: 1
         },
         {
           name: "Band2",
@@ -30,7 +30,8 @@ module.exports = {
           plays: 25,
           genre: "Indie",
           bio: "Demo band name and bio for testing purposes only",
-          label: "Eulogy"
+          label: "Eulogy",
+          memberId: 2
         },
         {
           name: "Band3",
@@ -39,7 +40,8 @@ module.exports = {
           plays: 100000,
           genre: "Metal",
           bio: "Demo band name and bio for testing purposes only",
-          label: "HeavyMetal"
+          label: "HeavyMetal",
+          memberId: 2
         }
       ], { validate: true });
       console.log("Seeding process completed successfully.");

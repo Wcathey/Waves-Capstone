@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Artist.belongsTo(
         models.User, {foreignKey: 'memberId', onDelete: 'CASCADE'}
+      );
+      Artist.hasMany(
+        models.Album, {foreignKey: "artistId", onDelete: "CASCADE"}
       )
     }
   }
