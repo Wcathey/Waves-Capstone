@@ -11,9 +11,9 @@ const router = express.Router();
     '/',
     validateSignup,
     async (req, res) => {
-      const {firstName, lastName, email, password, username } = req.body;
+      const {firstName, lastName, email, password, username, isArtist } = req.body;
       const hashedPassword = bcrypt.hashSync(password);
-      const user = await User.create({ firstName, lastName, email, username, hashedPassword });
+      const user = await User.create({ firstName, lastName, email, username, hashedPassword, isArtist });
 
       const safeUser = {
         id: user.id,
@@ -21,6 +21,7 @@ const router = express.Router();
         lastName: user.lastName,
         email: user.email,
         username: user.username,
+        
       };
 
       await setTokenCookie(res, safeUser);

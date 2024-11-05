@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
+const artistsRouter = require('./artists.js');
 const { restoreUser } = require("../../utils/auth.js");
 
 //use restoruser function to find user from db if exists or make user null
@@ -10,6 +11,8 @@ router.use(restoreUser);
 router.use('/session', sessionRouter);
 
 router.use('/users', usersRouter);
+
+router.use('/artists', artistsRouter);
 
 router.post('/test', (req, res) => {
     res.json({ requestBody: req.body });

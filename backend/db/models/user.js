@@ -4,11 +4,10 @@ const { Model, Validator } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      User.belongsTo(
-        models.Account,
-        {foreignKey: "userId", onDelete: 'CASCADE'}
-      )
 
+      User.hasMany(
+        models.Artist, {foreignKey: 'memberId', onDelete: "CASCADE"}
+      )
 
     }
   };
@@ -57,6 +56,11 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           len: [60, 60]
         }
+      },
+      isArtist: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       }
     },
     {
@@ -64,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User",
       defaultScope: {
         attributes: {
-          exclude: ["hashedPassword", "email", "createdAt", "updatedAt"]
+          exclude: ["hashedPassword", "email", "isArtist", "createdAt", "updatedAt"]
         }
       }
     }

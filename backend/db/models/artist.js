@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Artist.belongsTo(
+        models.User, {foreignKey: 'memberId', onDelete: 'CASCADE'}
+      )
     }
   }
   Artist.init({
@@ -29,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     plays: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: 0,
       validate: {
         min: 0
       }
@@ -49,9 +53,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
 
     },
+    memberId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
-    modelName: 'Artist',
+    modelName: 'Artist'
   });
   return Artist;
 };

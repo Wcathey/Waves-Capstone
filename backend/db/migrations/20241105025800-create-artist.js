@@ -24,7 +24,8 @@ module.exports = {
       plays: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        validate: true
+        validate: true,
+        defaultValue: 0
 
       },
       genre: {
@@ -40,6 +41,15 @@ module.exports = {
       label: {
         type: Sequelize.STRING,
 
+      },
+      memberId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Users",
+          key: "id"
+        },
+        onDelete: 'CASCADE'
       },
       createdAt: {
         allowNull: false,

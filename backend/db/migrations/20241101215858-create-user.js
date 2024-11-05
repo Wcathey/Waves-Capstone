@@ -38,6 +38,11 @@ module.exports = {
         type: Sequelize.STRING.BINARY,
         allowNull: false,
       },
+      isArtist: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

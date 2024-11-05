@@ -4,7 +4,6 @@
 
 const { User } = require('../models');
 const bcrypt = require("bcryptjs");
-const subscription = require('../models/subscription');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -24,7 +23,8 @@ module.exports = {
           email: 'user1@user.io',
           username: 'FakeUser1',
           hashedPassword: bcrypt.hashSync('password2'),
-          
+          isArtist: false
+
         },
         {
           firstName: 'Pete',
@@ -32,6 +32,7 @@ module.exports = {
           email: 'user2@user.io',
           username: 'FakeUser2',
           hashedPassword: bcrypt.hashSync('password3'),
+          isArtist: false
 
         }
       ], { validate: true });

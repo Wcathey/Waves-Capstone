@@ -44,6 +44,10 @@ const validateSignup = [
       .exists({ checkFalsy: true })
       .isLength({ min: 6 })
       .withMessage('Password must be 6 characters or more.'),
+      check('isArtist')
+      .exists({checkFalsy: true})
+      .isBoolean()
+      .withMessage('Please specify account type'),
     handleValidationErrors
   ];
 
