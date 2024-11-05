@@ -23,10 +23,11 @@ router.get('/:artistId', async (req, res, next) => {
 
 router.post('/', requireAuth, async (req, res, next) => {
     const {user} = req;
-    if(user.isArtist === false) {
+    if(!user.isArtist) {
         res.status(403);
-        res.json({message: "Forbidden"});
+        res.json({message: "Forbidden: Invalid account type"});
     }
+    else {
     const {
         name,
         city,
@@ -48,6 +49,7 @@ router.post('/', requireAuth, async (req, res, next) => {
     });
     res.status(201);
     res.json({newArtist});
+}
 })
 
 router.put('/artistId', requireAuth, async (req, res, next) => {

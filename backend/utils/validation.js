@@ -47,7 +47,7 @@ const validateSignup = [
       check('isArtist')
       .exists({checkFalsy: true})
       .isBoolean()
-      .withMessage('Please specify account type'),
+      .withMessage('isArtist must be true or false'),
     handleValidationErrors
   ];
 
