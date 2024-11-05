@@ -51,6 +51,43 @@ const validateSignup = [
     handleValidationErrors
   ];
 
+  const validateArtist = [
+    check('name')
+    .exists({checkFalsy: true})
+    .withMessage('Name is required'),
+    check('city')
+    .exists({checkFalsy: true})
+    .withMessage("City is required"),
+    check('state')
+    .exists({checkfalsy: true})
+    .withMessage('State is required'),
+    check('plays')
+    .exists({checkFalsy: true})
+    .isInt({min: 0})
+    .withMessage("Plays must be greater or equal to 0"),
+    check('genre')
+    .exists({checkfalsy: true})
+    .withMessage('Genre must be Other if no genre is selected'),
+    check('bio')
+    .exists({checkfalsy: true})
+    .isLength({min: 10, max: 256})
+    .withMessage("Bio must be 10 to 256 characters"),
+    check("label")
+    .exists({checkfalsy: true})
+    .withMessage("Please put N/A for label if no label"),
+    handleValidationErrors
+  ]
+
+  const validateAlbum = [
+    check('name')
+    .exists({checkfalsy: true})
+    .withMessage('Name is required'),
+    check('releaseDate')
+    .exists({checkfalsy: true})
+    .isBefore(new Date())
+    .withMessage('Date cant be in the future')
+  ]
+
   module.exports = {
-    handleValidationErrors, validateSignup
+    handleValidationErrors, validateSignup, validateArtist, validateAlbum
   }

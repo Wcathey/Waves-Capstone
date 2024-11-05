@@ -53,7 +53,8 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     label: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
 
     },
     memberId: {

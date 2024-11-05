@@ -20,7 +20,7 @@ module.exports = {
           plays: 0,
           genre: "Rock",
           bio: "Demo band name and bio for testing purposes only",
-          label: "none",
+          label: "N/A",
           memberId: 1
         },
         {

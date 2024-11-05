@@ -40,7 +40,7 @@ module.exports = {
       },
       label: {
         type: Sequelize.STRING,
-
+        allowNull: false
       },
       memberId: {
         type: Sequelize.INTEGER,
