@@ -27,6 +27,15 @@ module.exports = {
         },
         onDelete: 'CASCADE'
       },
+      artistId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Artists",
+          key: "id"
+        },
+        onDelete: 'CASCADE'
+      },
       trackId: {
         type: Sequelize.INTEGER,
         allowNull: false,

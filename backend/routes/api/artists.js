@@ -62,16 +62,14 @@ router.post('/:artistId/albums', requireAuth, validateAlbum, async (req, res, ne
         res.status(404);
         res.json({message: "Artist couldnt be found"});
     }
-    if(!user.isArtist) {
+
+    if(user.id !== artist.memberId) {
         res.status(403);
-        res.json({message: "Forbidden: Invalid account type"});
-    }
-    else if(user.id !== artist.memberId) {
-        res.status(403);
-        res.json({message: "Forbidden: Artist is associated with a different memberId"})
+        res.json({message: "Forbidden"})
     }
     else {
         const {name, releaseDate} = req.body;
+
         const newAlbum = await Album.create({
             name: name,
             releaseDate: releaseDate,

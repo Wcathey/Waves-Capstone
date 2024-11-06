@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Song.belongsTo(
         models.Album, {foreignKey: "albumId", onDelete: 'CASCADE'}
+      );
+      Song.belongsTo(
+        models.Artist, {foreignKey: "artistId", onDelete: 'CASCADE'}
       )
     }
   }
@@ -34,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     albumId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    artistId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
