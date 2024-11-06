@@ -23,7 +23,6 @@ module.exports = {
       },
       plays: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         validate: true,
         defaultValue: 0
 

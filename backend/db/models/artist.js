@@ -33,8 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     plays: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.INTEGER,
       defaultValue: 0,
       validate: {
         min: 0

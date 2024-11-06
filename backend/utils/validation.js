@@ -61,10 +61,6 @@ const validateSignup = [
     check('state')
     .exists({checkfalsy: true})
     .withMessage('State is required'),
-    check('plays')
-    .exists({checkFalsy: true})
-    .isInt({min: 0})
-    .withMessage("Plays must be greater or equal to 0"),
     check('genre')
     .exists({checkfalsy: true})
     .withMessage('Genre must be Other if no genre is selected'),
@@ -84,7 +80,8 @@ const validateSignup = [
     .withMessage('Name is required'),
     check('releaseDate')
     .exists({checkfalsy: true})
-    .isBefore(new Date())
+    .isDate()
+    .isBefore(new Date().toString())
     .withMessage('Date cant be in the future')
   ]
 

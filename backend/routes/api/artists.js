@@ -1,6 +1,7 @@
 const express = require('express');
-const {Artist} = require('../../db/models');
+const {Artist, Album} = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
+const {validateArtist, validateAlbum} = require('../../utils/validation');
 const router = express.Router();
 
 //Get all artists
@@ -8,6 +9,20 @@ router.get('/', async (req, res, next) => {
     const artists = await Artist.findAll();
     return res.json(artists);
 });
+
+//Get artists of current user
+router.get('/current', requireAuth, async (req, res, next) => {
+    const {user} = req;
+    const artists = await Artist.findAll({
+        where: {
+            memberId: user.id
+        }
+    });
+    console.log(artists)
+    res.json(artists);
+})
+
+
 //Get artist by id
 router.get('/:artistId', async (req, res, next) => {
 
@@ -21,7 +36,54 @@ router.get('/:artistId', async (req, res, next) => {
     }
 });
 
-router.post('/', requireAuth, async (req, res, next) => {
+//Get all albums by artist id
+router.get('/:artistId/albums', async (req, res, rext) => {
+    const artist = await Artist.findByPk(req.params.artistId);
+    if(!artist) {
+        res.status(404);
+        res.json({message: "Artist couldnt be found"});
+    }
+    else {
+        const albums = await Album.findAll({
+            where: {
+                artistId: artist.id
+            }
+        });
+        res.json(albums);
+    }
+})
+
+//add album to artist by artist id
+router.post('/:artistId/albums', requireAuth, validateAlbum, async (req, res, next) => {
+    const {user} = req;
+    const artist = await Artist.findByPk(req.params.artistId);
+
+    if(!artist) {
+        res.status(404);
+        res.json({message: "Artist couldnt be found"});
+    }
+    if(!user.isArtist) {
+        res.status(403);
+        res.json({message: "Forbidden: Invalid account type"});
+    }
+    else if(user.id !== artist.memberId) {
+        res.status(403);
+        res.json({message: "Forbidden: Artist is associated with a different memberId"})
+    }
+    else {
+        const {name, releaseDate} = req.body;
+        const newAlbum = await Album.create({
+            name: name,
+            releaseDate: releaseDate,
+            artistId: artist.id
+        });
+        res.status(201);
+        res.json(newAlbum)
+    }
+});
+
+
+router.post('/', requireAuth, validateArtist, async (req, res, next) => {
     const {user} = req;
     if(!user.isArtist) {
         res.status(403);
@@ -52,7 +114,7 @@ router.post('/', requireAuth, async (req, res, next) => {
 }
 })
 
-router.put('/artistId', requireAuth, async (req, res, next) => {
+router.put('/:artistId', requireAuth, validateArtist, async (req, res, next) => {
     const {user} = req;
     const artist = await Artist.findByPk(req.params.artistId);
     if(!artist) {
