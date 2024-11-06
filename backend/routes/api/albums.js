@@ -16,7 +16,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
         include: [
             {
                 model: Artist,
-                attributes: ["name", "plays", "memberId"],
+                attributes: ["name", "memberId"],
                 where: {
                     memberId: user.id
                 }

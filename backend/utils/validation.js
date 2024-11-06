@@ -72,7 +72,7 @@ const validateSignup = [
     .exists({checkfalsy: true})
     .withMessage("Please put N/A for label if no label"),
     handleValidationErrors
-  ]
+  ];
 
   const validateAlbum = [
     check('name')
@@ -82,9 +82,26 @@ const validateSignup = [
     .exists({checkfalsy: true})
     .isDate()
     .isBefore(new Date().toString())
-    .withMessage('Date cant be in the future')
-  ]
+    .withMessage('Date cant be in the future'),
+    handleValidationErrors
+  ];
+
+  const validateSong = [
+    check('name')
+    .exists({checkfalsy: true})
+    .withMessage("Name is required"),
+    check('releaseDate')
+    .exists({checkfalsy: true})
+    .isDate()
+    .isBefore(new Date().toString())
+    .withMessage('Date cant be in the future'),
+    check('trackId')
+    .exists({checkfalsy: true})
+    .isInt({min: 1})
+    .withMessage("trackId must start at 1"),
+    handleValidationErrors
+  ];
 
   module.exports = {
-    handleValidationErrors, validateSignup, validateArtist, validateAlbum
-  }
+    handleValidationErrors, validateSignup, validateArtist, validateAlbum, validateSong
+  };

@@ -103,7 +103,6 @@ router.post('/', requireAuth, validateArtist, async (req, res, next) => {
         name: name,
         city: city,
         state: state,
-        plays: 0,
         genre: genre,
         bio: bio,
         label: label,

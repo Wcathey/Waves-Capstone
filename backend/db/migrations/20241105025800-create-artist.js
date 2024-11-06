@@ -21,12 +21,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      plays: {
-        type: Sequelize.INTEGER,
-        validate: true,
-        defaultValue: 0
-
-      },
       genre: {
         type: Sequelize.STRING,
         allowNull: false,
