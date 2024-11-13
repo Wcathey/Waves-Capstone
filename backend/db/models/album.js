@@ -26,15 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     releaseDate: {
       type: DataTypes.DATE,
-      allowNull: false,
-      validate: {
-        customDateCheck(value) {
-          if(new Date(value) > new Date()) {
-            throw new Error("Release date can not be in the future")
-          }
-
-        }
-      }
+      allowNull: false
     },
     artistId: {
       type: DataTypes.INTEGER,

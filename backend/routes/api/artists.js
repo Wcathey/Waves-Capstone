@@ -55,6 +55,7 @@ router.get('/:artistId/albums', async (req, res, rext) => {
 
 //add album to artist by artist id
 router.post('/:artistId/albums', requireAuth, validateAlbum, async (req, res, next) => {
+    const {name, releaseDate} = req.body;
     const {user} = req;
     const artist = await Artist.findByPk(req.params.artistId);
 
@@ -68,15 +69,13 @@ router.post('/:artistId/albums', requireAuth, validateAlbum, async (req, res, ne
         res.json({message: "Forbidden"})
     }
     else {
-        const {name, releaseDate} = req.body;
-
         const newAlbum = await Album.create({
             name: name,
             releaseDate: releaseDate,
-            artistId: artist.id
+            artistId: req.params.artistId
         });
-        res.status(201);
-        res.json(newAlbum)
+
+        return res.json(newAlbum)
     }
 });
 

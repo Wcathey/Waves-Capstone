@@ -16,6 +16,9 @@ module.exports = (sequelize, DataTypes) => {
       );
       Song.belongsTo(
         models.Artist, {foreignKey: "artistId", onDelete: 'CASCADE'}
+      );
+      Song.hasOne(
+        models.Upload, {foreignKey: "songId", onDelete: 'CASCADE'}
       )
     }
   }
@@ -26,15 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     releaseDate: {
       type: DataTypes.DATE,
-      allowNull: false,
-      validate: {
-        customDateCheck(value) {
-          if(new Date(value) > new Date()) {
-            throw new Error("Release date can not be in the future")
-          }
-
-        }
-      }
+      allowNull: false
     },
     albumId: {
       type: DataTypes.INTEGER,

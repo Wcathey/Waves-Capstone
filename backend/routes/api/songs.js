@@ -30,7 +30,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
 
 //Get song by songId
 router.get('/:songId', async (req, res, next) => {
-    const foundSong = Song.findByPk(req.params.songId);
+    const foundSong = await Song.findByPk(req.params.songId);
     if(!foundSong) {
         res.status(404);
         res.json({message: "Song couldnt be found"});
@@ -45,7 +45,7 @@ router.get('/:songId', async (req, res, next) => {
 router.put('/:songId', requireAuth, validateSong, async (req, res, next) => {
     const {name, releaseDate, trackId} = req.body;
     const {user} = req;
-    const songToUpdate = Song.findByPk(req.params.songId, {
+    const songToUpdate = await Song.findByPk(req.params.songId, {
         include: [
             Artist
         ]
@@ -81,9 +81,9 @@ router.put('/:songId', requireAuth, validateSong, async (req, res, next) => {
 router.delete('/:songId', requireAuth, async (req, res, next) => {
     const {user} = req;
     const songToDelete = await Song.findByPk(req.params.songId, {
-        include: {
+        include: [
             Artist
-        }
+        ]
     });
     if(!songToDelete) {
         res.status(404);

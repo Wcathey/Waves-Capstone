@@ -37,6 +37,7 @@ module.exports = {
       hashedPassword: {
         type: Sequelize.STRING.BINARY,
         allowNull: false,
+        validate: true
       },
       isArtist: {
         type: Sequelize.INTEGER,

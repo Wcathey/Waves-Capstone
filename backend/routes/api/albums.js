@@ -108,7 +108,7 @@ router.delete('/:albumId', requireAuth, async (req, res, next) => {
 router.post('/:albumId/songs', requireAuth, validateSong, async (req, res, next) => {
     const {name, releaseDate, trackId} = req.body;
     const {user} = req;
-    const foundAlbum = Album.findByPk(req.params.songId, {
+    const foundAlbum = await Album.findByPk(req.params.albumId, {
         include: [
             Artist
         ]
@@ -117,7 +117,7 @@ router.post('/:albumId/songs', requireAuth, validateSong, async (req, res, next)
         res.status(404);
         res.json({message: "Album couldnt be found"});
     }
-    if(user.id !== foundAlbum.Artist.memberId) {
+    else if(foundAlbum.Artist.memberId !== user.id) {
         res.status(403);
         res.json({message: "Forbidden"});
     }
