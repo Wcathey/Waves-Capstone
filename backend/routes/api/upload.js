@@ -1,16 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../../utils/multer')
-const cloudinaryUploader = require('../../utils/cloudinaryUploader')
+const {cloudinaryUploader, cloudinaryDeleter} = require('../../utils/cloudinaryCRUD')
 const { requireAuth } = require('../../utils/auth');
 const {Song, Upload} = require('../../db/models');
+
+
 router.post("/", requireAuth, upload, async (req, res) => {
     const {user} = req;
-    const song = await Song.findOne({
-        where: {
-            name: req.file.display_name
-        }
-    });
+
     if(user.isArtist === false) {
         res.status(403);
         res.json({message: "Forbidden: Invalid account type"});
@@ -20,15 +18,20 @@ router.post("/", requireAuth, upload, async (req, res) => {
             .status(500)
             .json({message: `File validation error: ${req.fileValidationError}`});
     }
-    else if(!song) {
-        res.status(404);
-        res.json({message: "Song couldnt be found"});
-    }
 
     else {
 
 
     const audioResponse = await cloudinaryUploader(req, res);
+    const song = await Song.findOne({
+        where: {
+            name: audioResponse.display_name
+        }
+    });
+    if(!song) {
+        res.status(404);
+        return res.json({message: "Song couldnt be found"});
+    }
     const uploadedSongData = await Upload.create({
         songId: song.id,
         asset_id: audioResponse.asset_id,
@@ -52,5 +55,17 @@ router.post("/", requireAuth, upload, async (req, res) => {
     return res.status(201).json({uploadedSongData});
     }
 });
+
+router.delete('/:uploadId', requireAuth, async (req, res) => {
+    const uploadToDelete = await Upload.findByPk(req.params.uploadId);
+    if(!uploadToDelete) {
+        res.status(404);
+        res.json({message: "Upload couldnt be found"});
+    }
+    else {
+        await cloudinaryDeleter(req, res);
+        
+    }
+})
 
 module.exports = router;
