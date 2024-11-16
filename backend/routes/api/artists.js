@@ -18,7 +18,6 @@ router.get('/current', requireAuth, async (req, res, next) => {
             memberId: user.id
         }
     });
-    console.log(artists)
     res.json(artists);
 })
 

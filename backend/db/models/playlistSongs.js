@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      
+
     }
   }
   PlaylistSongs.init({
@@ -27,5 +27,5 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'PlaylistSongs',
   });
-  return Playlist - Songs;
+  return PlaylistSongs;
 };

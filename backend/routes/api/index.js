@@ -5,6 +5,7 @@ const artistsRouter = require('./artists.js');
 const albumsRouter = require('./albums.js');
 const songsRouter = require('./songs.js');
 const uploadRouter = require('./upload.js');
+const playlistRouter = require('./playlists.js');
 const { restoreUser } = require("../../utils/auth.js");
 
 //use restoruser function to find user from db if exists or make user null
@@ -22,6 +23,8 @@ router.use('/albums', albumsRouter);
 router.use('/songs', songsRouter);
 
 router.use('/upload', uploadRouter);
+
+router.use('/playlists', playlistRouter)
 
 router.post('/test', (req, res) => {
     res.json({ requestBody: req.body });
