@@ -10,6 +10,9 @@ module.exports = (sequelize, DataTypes) => {
       );
       User.hasMany(
         models.Playlist, {foreignKey: "userId", onDelete: 'CASCADE'}
+      );
+      User.hasOne(
+        models.UserProfileImage, {foreignKey: "userId", onDelete: 'CASCADE'}
       )
 
     }
