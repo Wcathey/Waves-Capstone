@@ -65,7 +65,7 @@ router.post('/:artistId/albums', requireAuth, validateAlbum, async (req, res, ne
 
     if(user.id !== artist.memberId) {
         res.status(403);
-        res.json({message: "Forbidden"})
+        res.json({message: "Forbidden: Album belongs to a different Artist"})
     }
     else {
         const newAlbum = await Album.create({
@@ -118,7 +118,7 @@ router.put('/:artistId', requireAuth, validateArtist, async (req, res, next) => 
     }
     if(user.id !== artist.memberId) {
         res.status(403);
-        res.json({message: "Forbidden"});
+        res.json({message: "Forbidden: Artist belongs to a different User"});
     }
     else {
         const {name, city, state, genre, bio, label} = req.body
@@ -151,7 +151,7 @@ router.delete('/:artistId', requireAuth, async (req, res, next) => {
     }
     if(user.id !== artist.memberId) {
         res.status(403);
-        res.json({message: "Forbidden"});
+        res.json({message: "Forbidden: Artist belongs to a different User"});
     }
     else {
         await Artist.destroy({

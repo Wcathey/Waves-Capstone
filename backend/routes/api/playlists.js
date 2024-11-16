@@ -1,12 +1,13 @@
 const express = require('express');
 const { requireAuth } = require('../../utils/auth');
 const {Playlist, Song, PlaylistSongs} = require('../../db/models');
-const playlist = require('../../db/models/playlist');
 const router = express.Router();
 
 //get all playlists
 router.get('/', async (req, res, next) => {
-    const playlists = await Playlist.findAll();
+    const playlists = await Playlist.findAll({
+        attributes: ["id", "name"]
+    });
     return res.json(playlists);
 });
 
@@ -17,13 +18,17 @@ router.get('/current', requireAuth, async (req, res, next) => {
         where: {
             userId: user.id
         }
+
     });
     res.json(playlists);
 });
 
 //Get playlist by id
 router.get('/:playlistId', async (req, res, next) => {
-    const foundPlaylist = await Playlist.findByPk(req.params.playlistId);
+    const foundPlaylist = await Playlist.findByPk(req.params.playlistId, {
+        attributes: ["id", "name"],
+        include: [Song]
+    });
     if(!foundPlaylist) {
         res.status(404);
         res.json({message: "Playlist couldnt be found"});
@@ -76,24 +81,79 @@ router.post('/:playlistId/songs', requireAuth, async (req, res, next) => {
     }
 });
 
-//Get all songs on a playlist
-router.get('/:playlistId/songs', requireAuth, async (req, res, next) => {
+//Update playlist by id
+router.put('/:playlistId', requireAuth, async (req, res, next) => {
+    const {user} = req;
+    const foundPlaylist = await Playlist.findByPk(req.params.playlistId);
+    if(!foundPlaylist) {
+        res.status(404);
+        res.json({message: "Playlist couldnt be found"});
+    }
+    else if(foundPlaylist.userId !== user.id) {
+        res.status(403);
+        return res.json({message: "Forbidden: playlist belongs to a different User"})
+    }
+    else {
+        const {name} = req.body;
+        await Playlist.update({
+            name: name
+        },
+        {
+            where: {
+                id: req.params.playlistId
+            }
+        });
+        const updatedPlaylist = await Playlist.findByPk(req.params.playlistId);
+
+        res.json(updatedPlaylist);
+}
+});
+
+//delete playlist by id
+router.delete('/:playlistId', requireAuth, async (req, res, next) => {
     const foundPlaylist = await Playlist.findByPk(req.params.playlistId);
     if(!foundPlaylist) {
         res.status(404);
         res.json({message: "Playlist couldnt be found"});
     }
     else {
-        const songList = PlaylistSongs.findAll({
-            include: [Song],
-            attributes: ["songId"],
+        await Playlist.destroy({
             where: {
-                playlistId: req.params.playlistId
+                id: req.params.playlistId
             }
         });
-        res.status(201);
-        res.json(songList)
+        res.json({message: "Playlist deleted successfully"})
     }
+});
+
+//delete song from playlist
+router.delete('/:playlistId/songs/:songId', requireAuth, async (req, res, next) => {
+    const {user} = req;
+    const checkUserPlaylist = await Playlist.findByPk(req.params.playlistId);
+        if(checkUserPlaylist.userId !== user.id) {
+            res.status(403);
+           return res.json({message: "Forbidden: playlist belongs to a different User"})
+        }
+    const songOnPlaylist = await PlaylistSongs.findOne({
+        where: {
+            playlistId: req.params.playlistId,
+            songId: req.params.songId
+        }
+
+    });
+       if(!songOnPlaylist) {
+            res.status(404);
+            res.json({message: "Song couldnt be found on playlist"});
+        }
+       else {
+        PlaylistSongs.destroy({
+            where: {
+                playlistId: req.params.playlistId,
+                songId: req.params.songId
+            }
+        });
+        res.json({message: "Song successfully removed from playlist"})
+       }
 })
 
 

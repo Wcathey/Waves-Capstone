@@ -56,7 +56,7 @@ router.put('/:songId', requireAuth, validateSong, async (req, res, next) => {
     }
     if(user.id !== songToUpdate.Artist.memberId) {
         res.status(403);
-        res.json({message: "Forbidden"});
+        res.json({message: "Forbidden: song belongs to a different Artist"});
     }
     else {
         await Song.update(
@@ -92,7 +92,7 @@ router.delete('/:songId', requireAuth, async (req, res, next) => {
     }
     if(user.id !== songToDelete.Artist.memberId) {
         res.status(403);
-        res.json({message: "Forbidden"});
+        res.json({message: "Forbidden: song belongs to a different Artist"});
     }
     else {
         await Song.destroy({
