@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       );
       Song.hasOne(
         models.Upload, {foreignKey: "songId", onDelete: 'CASCADE'}
+      );
+      Song.belongsToMany(
+        models.Playlist, {through: 'PlaylistSongs'}
       )
     }
   }
@@ -46,12 +49,20 @@ module.exports = (sequelize, DataTypes) => {
         min: 1
       }
     },
+    duration: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     totalPlays: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
       validate: {
         min: 0
       }
+    },
+    uuid: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
     sequelize,

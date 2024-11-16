@@ -65,6 +65,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    playback_url: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     asset_folder: {
       type: DataTypes.STRING
     },

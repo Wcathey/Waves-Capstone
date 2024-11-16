@@ -1,4 +1,5 @@
 const express = require('express');
+const { v4: uuidv4} = require('uuid');
 const { Album, Artist, Song } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const { validateAlbum, validateSong } = require('../../utils/validation');
@@ -106,7 +107,7 @@ router.delete('/:albumId', requireAuth, async (req, res, next) => {
 
 //Add song to album by album id
 router.post('/:albumId/songs', requireAuth, validateSong, async (req, res, next) => {
-    const {name, releaseDate, trackId} = req.body;
+    const {name, releaseDate, trackId, duration} = req.body;
     const {user} = req;
     const foundAlbum = await Album.findByPk(req.params.albumId, {
         include: [
@@ -122,14 +123,16 @@ router.post('/:albumId/songs', requireAuth, validateSong, async (req, res, next)
         res.json({message: "Forbidden"});
     }
     else {
+        const uniqueId = uuidv4();
         const newSong = await Song.create({
             name: name,
             releaseDate: releaseDate,
             albumId: foundAlbum.id,
             artistId: foundAlbum.Artist.id,
             trackId: trackId,
-            totalPlays: 0
-
+            duration: duration,
+            totalPlays: 0,
+            uuid: uniqueId
         });
         res.status(201);
         res.json({newSong});

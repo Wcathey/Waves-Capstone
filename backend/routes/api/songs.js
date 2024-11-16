@@ -43,7 +43,7 @@ router.get('/:songId', async (req, res, next) => {
 
 //Update song by songId
 router.put('/:songId', requireAuth, validateSong, async (req, res, next) => {
-    const {name, releaseDate, trackId} = req.body;
+    const {name, releaseDate, trackId, duration} = req.body;
     const {user} = req;
     const songToUpdate = await Song.findByPk(req.params.songId, {
         include: [
@@ -63,7 +63,8 @@ router.put('/:songId', requireAuth, validateSong, async (req, res, next) => {
             {
                 name: name,
                 releaseDate: releaseDate,
-                trackId
+                trackId: trackId,
+                duration: duration
             },
             {
                 where: {

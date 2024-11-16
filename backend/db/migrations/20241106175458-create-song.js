@@ -41,10 +41,18 @@ module.exports = {
         allowNull: false,
         validate: true
       },
+      duration: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       totalPlays: {
         type: Sequelize.INTEGER,
         defaultValue: 0,
         validate: true
+      },
+      uuid: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,

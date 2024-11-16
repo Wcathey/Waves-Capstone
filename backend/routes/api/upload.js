@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../../utils/multer')
-const {cloudinaryUploader, cloudinaryDeleter} = require('../../utils/cloudinaryCRUD')
+const cloudinary = require("../../utils/cloudinary");
+const cloudinaryUploader = require('../../utils/cloudinaryUploader')
 const { requireAuth } = require('../../utils/auth');
 const {Song, Upload} = require('../../db/models');
 
@@ -29,6 +30,7 @@ router.post("/", requireAuth, upload, async (req, res) => {
         }
     });
     if(!song) {
+        console.log(audioResponse)
         res.status(404);
         return res.json({message: "Song couldnt be found"});
     }
@@ -45,6 +47,7 @@ router.post("/", requireAuth, upload, async (req, res) => {
         placeholder: audioResponse.placeholder,
         url: audioResponse.url,
         secure_url: audioResponse.secure_url,
+        playback_url: audioResponse.playback_url,
         asset_folder: audioResponse.asset_folder,
         display_name: audioResponse.display_name,
         original_filename: audioResponse.original_filename
@@ -57,14 +60,22 @@ router.post("/", requireAuth, upload, async (req, res) => {
 });
 
 router.delete('/:uploadId', requireAuth, async (req, res) => {
-    const uploadToDelete = await Upload.findByPk(req.params.uploadId);
-    if(!uploadToDelete) {
+
+    try {
+        const audioFile = await Upload.findByPk(req.params.uploadId);
+        const audioId = audioFile.public_id;
+        cloudinary.uploader
+        .destroy(audioId, {resource_type: 'video'})
+        .then(result => console.log(result))
+
+        res.status(201).json({
+            success: true,
+            message: "file successfully deleted"
+        })
+    } catch(error) {
+        console.log(error);
         res.status(404);
-        res.json({message: "Upload couldnt be found"});
-    }
-    else {
-        await cloudinaryDeleter(req, res);
-        
+        res.json({message: error.message})
     }
 })
 

@@ -62,6 +62,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      playback_url: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       asset_folder: {
         type: Sequelize.STRING
       },
