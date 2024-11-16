@@ -135,7 +135,7 @@ router.post('/:albumId/songs', requireAuth, validateSong, async (req, res, next)
             uuid: uniqueId
         });
         res.status(201);
-        res.json({newSong});
+        res.json(newSong);
     }
 })
 

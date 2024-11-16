@@ -1,6 +1,7 @@
 const express = require('express');
 const { requireAuth } = require('../../utils/auth');
 const {Playlist, Song, PlaylistSongs} = require('../../db/models');
+const playlist = require('../../db/models/playlist');
 const router = express.Router();
 
 //get all playlists
@@ -41,7 +42,6 @@ router.post('/', requireAuth, async (req, res, next) => {
         name: name,
         userId: user.id
     });
-
     return res.status(201).json(newPlaylist);
 })
 
@@ -69,12 +69,10 @@ router.post('/:playlistId/songs', requireAuth, async (req, res, next) => {
             playlistId: foundPlaylist.id,
             songId: foundSong.id
        });
-       const UserPlaylist = await PlaylistSongs.findByPk(addedSong.id, {
-        include: [Playlist, Song]
-       });
+
 
        res.status(201);
-       res.json(UserPlaylist)
+       res.json(addedSong)
     }
 });
 

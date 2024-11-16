@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         models.Upload, {foreignKey: "songId", onDelete: 'CASCADE'}
       );
       Song.belongsToMany(
-        models.Playlist, {through: 'PlaylistSongs'}
+        models.Playlist, {through: 'PlaylistSongs', foreignKey: "playlistId", otherKey: "songId"}
       )
     }
   }

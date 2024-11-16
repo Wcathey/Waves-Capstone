@@ -99,10 +99,6 @@ const validateSignup = [
     .exists({checkfalsy: true})
     .isInt({min: 1})
     .withMessage("trackId must start at 1"),
-    check('uuid')
-    .exists({checkfalsy: true})
-    .isUUID()
-    .withMessage("uuid must be valid unique string identifier"),
     handleValidationErrors
   ];
 
